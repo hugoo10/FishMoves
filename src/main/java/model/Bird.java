@@ -4,13 +4,14 @@ import java.awt.geom.Point2D;
 import java.util.Comparator;
 import java.util.Optional;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 public class Bird {
-    private final static double VIEW_DISTANCE = 200;
+    private final static double VIEW_DISTANCE = 50;
     private final static double TOO_CLOSE_DISTANCE = 20;
     private final static double TOO_FAR_DISTANCE = 50;
     private final static int SPEED = 100;
-    private final static int ANGLE_STEP = 5;
+    private final static int ANGLE_STEP = 10;
 
     private int id;
     private Point2D.Double position;
@@ -58,14 +59,14 @@ public class Bird {
             Bird closestBird = optionalBird.get();
             double distanceBird = closestBird.position.distance(this.position);
 
-            /*if (distanceBird <= TOO_CLOSE_DISTANCE) {
+            if (distanceBird <= TOO_CLOSE_DISTANCE) {
                 angleToTake = angleToEscape(closestBird);
             } else if (distanceBird >= TOO_FAR_DISTANCE) {
-                angleToTake = angleToGoTo(closestBird);
-            } else {
                 angleToTake = angleToGoToCenterOfGravity();
-            }*/
-            angleToTake = angleToGoToCenterOfGravity();
+            } else {
+                angleToTake = closestBird.angleInDegree;
+            }
+            //this.angleInDegree = (getPasToGoTo(angleToTake) + this.angleInDegree) % 360;
             this.angleInDegree = angleToTake;
         }
         doMove(time);
@@ -90,7 +91,8 @@ public class Bird {
     public Point2D.Double getCenterOfGravity() {
         double xSum = 0;
         double ySum = 0;
-        for (Bird bird : world.getBirds()) {
+        for (Bird bird : world.getBirds().stream().filter(bird -> bird.id != this.id)
+                .filter(bird -> bird.position.distance(this.position) < VIEW_DISTANCE).collect(Collectors.toList())) {
             xSum += bird.position.x;
             ySum += bird.position.y;
         }
@@ -148,19 +150,19 @@ public class Bird {
     }
 
     public boolean isUnderBird(Bird bird) {
-        return isAUnderB(bird.position, this.position);
+        return isAUnderB(this.position, bird.position);
     }
 
     public boolean isUpperBird(Bird bird) {
-        return isAUpperB(bird.position, this.position);
+        return isAUpperB(this.position, bird.position);
     }
 
     public boolean isLeftToBird(Bird bird) {
-        return isALeftToB(bird.position, this.position);
+        return isALeftToB(this.position, bird.position);
     }
 
     public boolean isRightToBird(Bird bird) {
-        return isARightToB(bird.position, this.position);
+        return isARightToB(this.position, bird.position);
     }
 
     public boolean isAUnderB(Point2D.Double a, Point2D.Double b) {
@@ -172,10 +174,10 @@ public class Bird {
     }
 
     public boolean isALeftToB(Point2D.Double a, Point2D.Double b) {
-        return a.x > b.x;
+        return a.x < b.x;
     }
 
     public boolean isARightToB(Point2D.Double a, Point2D.Double b) {
-        return a.x < b.x;
+        return a.x > b.x;
     }
 }
