@@ -1,52 +1,37 @@
 package model;
 
 import java.awt.geom.Point2D;
-import java.util.Comparator;
 import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-public class Bird {
-    private final static double VIEW_DISTANCE = 50;
-    private final static double TOO_CLOSE_DISTANCE = 20;
-    private final static double TOO_FAR_DISTANCE = 50;
-    private final static int SPEED = 100;
+public class Bird extends MovingEntity {
     private final static int ANGLE_STEP = 10;
-
-    private int id;
-    private Point2D.Double position;
     private int angleInDegree;
-    private World world;
 
-    //Meta
-    private long lastMoveTime;
 
     public Bird(int id, double posX, double posY, World world) {
-        this.id = id;
-        this.world = world;
-        this.position = new Point2D.Double(posX, posY);
+        super(id, posX, posY, world);
         this.angleInDegree = new Random().nextInt(360);
-        this.lastMoveTime = System.currentTimeMillis();
     }
 
-    public Point2D.Double getPosition() {
-        return position;
-    }
-
+    @Override
     public int getAngleInDegree() {
         return angleInDegree;
     }
 
+    @Override
     public double getAngleInRadian() {
         return Math.toRadians(this.angleInDegree);
     }
 
+    @Override
     public void move(long time) {
         long delta = time - this.lastMoveTime;
         double distance = (delta / 1000D) * SPEED;
         double distanceX = distance * Math.cos(getAngleInRadian());
         double distanceY = distance * Math.sin(getAngleInRadian());
-        Optional<Bird> optionalBird = getClosestBird();
+        Optional<MovingEntity> optionalBird = getClosest();
         //GAUCHE OU DROITE
         if (position.x + distanceX < 0 || position.x + distanceX >= 1920) {
             angleInDegree = (540 - angleInDegree) % 360;
@@ -56,15 +41,15 @@ public class Bird {
             angleInDegree = 360 - angleInDegree;
         } else if (optionalBird.isPresent()) {
             final int angleToTake;
-            Bird closestBird = optionalBird.get();
+            MovingEntity closestBird = optionalBird.get();
             double distanceBird = closestBird.position.distance(this.position);
 
             if (distanceBird <= TOO_CLOSE_DISTANCE) {
-                angleToTake = angleToEscape(closestBird);
+                angleToTake = angleToEscape((Bird) closestBird);
             } else if (distanceBird >= TOO_FAR_DISTANCE) {
                 angleToTake = angleToGoToCenterOfGravity();
             } else {
-                angleToTake = closestBird.angleInDegree;
+                angleToTake = closestBird.getAngleInDegree();
             }
             //this.angleInDegree = (getPasToGoTo(angleToTake) + this.angleInDegree) % 360;
             this.angleInDegree = angleToTake;
@@ -81,22 +66,15 @@ public class Bird {
         this.lastMoveTime = time;
     }
 
-    public Optional<Bird> getClosestBird() {
-        return this.world.getBirds().stream()
-                .filter(bird -> bird.id != this.id)
-                .filter(bird -> bird.position.distance(this.position) < VIEW_DISTANCE)
-                .min(Comparator.comparing(bird -> bird.position.distance(this.position)));
-    }
-
     public Point2D.Double getCenterOfGravity() {
         double xSum = 0;
         double ySum = 0;
-        for (Bird bird : world.getBirds().stream().filter(bird -> bird.id != this.id)
+        for (MovingEntity bird : world.getMovingEntities().stream().filter(bird -> bird.id != this.id)
                 .filter(bird -> bird.position.distance(this.position) < VIEW_DISTANCE).collect(Collectors.toList())) {
             xSum += bird.position.x;
             ySum += bird.position.y;
         }
-        return new Point2D.Double(xSum / world.getBirds().size(), ySum / world.getBirds().size());
+        return new Point2D.Double(xSum / world.getMovingEntities().size(), ySum / world.getMovingEntities().size());
     }
 
 

@@ -7,23 +7,23 @@ import java.util.Random;
 public class World {
     private final double width;
     private final double height;
-    private final List<Bird> birds;
+    private final List<MovingEntity> movingEntities;
 
     public World(double width, double height, int nbBirds) {
         this.width = width;
         this.height = height;
-        this.birds = new ArrayList<>();
+        this.movingEntities = new ArrayList<>();
         for (int i = 0; i < nbBirds; ++i) {
-            this.birds.add(new Bird(i, new Random().nextInt((int)this.width) , new Random().nextInt((int)this.height), this));
+            this.movingEntities.add(new Bird2(i, new Random().nextInt((int) this.width), new Random().nextInt((int) this.height), this));
         }
     }
 
-    public List<Bird> getBirds() {
-        return birds;
+    public List<MovingEntity> getMovingEntities() {
+        return movingEntities;
     }
 
     public void tick() {
         long time = System.currentTimeMillis();
-        birds.parallelStream().forEach(bird -> bird.move(time));
+        movingEntities.parallelStream().forEach(movingEntity -> movingEntity.move(time));
     }
 }

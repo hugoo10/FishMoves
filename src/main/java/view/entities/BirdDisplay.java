@@ -1,6 +1,7 @@
 package view.entities;
 
 import model.Bird;
+import model.MovingEntity;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -12,10 +13,10 @@ public class BirdDisplay {
     private BirdDisplay() {
     }
 
-    public static Polygon renderBird(Bird bird) {
+    public static Polygon renderMovingEntity(MovingEntity movingEntity) {
         Polygon polygon = new Polygon(new int[]{12, -6, -6}, new int[]{0, 6, -6}, 3);
-        polygon.translate((int) bird.getPosition().x, (int) bird.getPosition().y);
-        return rotatePolygon(polygon, bird.getPosition(), bird.getAngleInDegree());
+        polygon.translate((int) movingEntity.getPosition().x, (int) movingEntity.getPosition().y);
+        return rotatePolygon(polygon, movingEntity.getPosition(), movingEntity.getAngleInDegree());
     }
 
     private static Polygon rotatePolygon(Polygon polygon, Point2D.Double center, double rotationAngle) throws IllegalArgumentException {

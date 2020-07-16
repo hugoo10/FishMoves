@@ -1,7 +1,7 @@
 package view;
 
 import controller.WorldController;
-import model.Bird;
+import model.MovingEntity;
 import view.entities.BirdDisplay;
 
 import javax.swing.*;
@@ -20,8 +20,8 @@ public class WorldPane extends JPanel {
         graphics2D.setColor(Color.BLACK);
         graphics2D.fillRect(0, 0, 1920, 1080);
         graphics2D.setColor(Color.BLUE);
-        for (Bird bird : worldController.getWorld().getBirds()) {
-            graphics2D.fillPolygon(BirdDisplay.renderBird(bird));
+        for (MovingEntity movingEntity : worldController.getWorld().getMovingEntities()) {
+            graphics2D.fillPolygon(BirdDisplay.renderMovingEntity(movingEntity));
         }
     }
 }
