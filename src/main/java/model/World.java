@@ -14,8 +14,16 @@ public class World {
         this.height = height;
         this.movingEntities = new ArrayList<>();
         for (int i = 0; i < nbBirds; ++i) {
-            this.movingEntities.add(new Bird2(i, new Random().nextInt((int) this.width), new Random().nextInt((int) this.height), this));
+            this.movingEntities.add(new Bird(i, randomWithMargin((int) this.width, 400), randomWithMargin((int) this.height, 200), this));
         }
+    }
+
+    private int randomBetween(int inf, int sup) {
+        return new Random().nextInt(sup - inf) + inf;
+    }
+
+    private int randomWithMargin(int size, int margin) {
+        return randomBetween(margin, size - margin);
     }
 
     public List<MovingEntity> getMovingEntities() {

@@ -1,6 +1,5 @@
 package view.entities;
 
-import model.Bird;
 import model.MovingEntity;
 
 import java.awt.*;
@@ -16,10 +15,10 @@ public class BirdDisplay {
     public static Polygon renderMovingEntity(MovingEntity movingEntity) {
         Polygon polygon = new Polygon(new int[]{12, -6, -6}, new int[]{0, 6, -6}, 3);
         polygon.translate((int) movingEntity.getPosition().x, (int) movingEntity.getPosition().y);
-        return rotatePolygon(polygon, movingEntity.getPosition(), movingEntity.getAngleInDegree());
+        return rotatePolygon(polygon, movingEntity.getPosition(), movingEntity.getAngleInRadian());
     }
 
-    private static Polygon rotatePolygon(Polygon polygon, Point2D.Double center, double rotationAngle) throws IllegalArgumentException {
+    private static Polygon rotatePolygon(Polygon polygon, Point2D.Double center, double rotationAngleRad) throws IllegalArgumentException {
         // copy the arrays so that we dont manipulate the originals, that way we can
         // reuse them if necessary
         int[] xpoints = Arrays.copyOf(polygon.xpoints, polygon.xpoints.length);
@@ -38,7 +37,7 @@ public class BirdDisplay {
         Point2D[] rotatedPoints = new Point2D[list.size()];
 
         // rotate the points
-        AffineTransform transform = AffineTransform.getRotateInstance(Math.toRadians(rotationAngle), center.x, center.y);
+        AffineTransform transform = AffineTransform.getRotateInstance(rotationAngleRad, center.x, center.y);
         transform.transform(list.toArray(new Point2D[0]), 0, rotatedPoints, 0, rotatedPoints.length);
 
         // build the polygon from the rotated points and return it
