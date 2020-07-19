@@ -18,6 +18,7 @@ public class BirdDisplay {
         return rotatePolygon(polygon, movingEntity.getPosition(), movingEntity.getAngleInRadian());
     }
 
+
     private static Polygon rotatePolygon(Polygon polygon, Point2D.Double center, double rotationAngleRad) throws IllegalArgumentException {
         // copy the arrays so that we dont manipulate the originals, that way we can
         // reuse them if necessary

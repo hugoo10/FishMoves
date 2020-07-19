@@ -28,6 +28,7 @@ public class Bird extends MovingEntity {
         bounce();
         this.lastMoveTime = time;
         this.position.setLocation(this.position.x + this.dX, this.position.y + this.dY);
+        this.addMove(new Point2D.Double(this.position.x, this.position.y));
     }
 
     private void bounce() {

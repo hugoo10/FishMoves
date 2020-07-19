@@ -1,10 +1,7 @@
 package model;
 
 import java.awt.geom.Point2D;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
@@ -13,10 +10,13 @@ public abstract class MovingEntity {
     protected final static double TOO_CLOSE_DISTANCE = 40;
     protected final static double TOO_FAR_DISTANCE = 160;
     protected final static int SPEED = 300;
+    protected final static int MAX_HISTORY = 50;
 
     protected int id;
     protected Point2D.Double position;
     protected World world;
+
+    protected Queue<Point2D.Double> history = new ArrayDeque<>();
     //Meta
     protected long lastMoveTime;
 
@@ -59,5 +59,16 @@ public abstract class MovingEntity {
 
     public Optional<MovingEntity> getClosestOne() {
         return getNClosest(1).stream().findFirst();
+    }
+
+    protected void addMove(Point2D.Double move) {
+        this.history.add(move);
+        if (this.history.size() > MAX_HISTORY) {
+            this.history.remove();
+        }
+    }
+
+    public Queue<Point2D.Double> getHistory() {
+        return history;
     }
 }
