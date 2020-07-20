@@ -10,7 +10,7 @@ public abstract class MovingEntity {
     protected final static double TOO_CLOSE_DISTANCE = 40;
     protected final static double TOO_FAR_DISTANCE = 160;
     protected final static int SPEED = 300;
-    protected final static int MAX_HISTORY = 50;
+    protected final static int MAX_HISTORY = 100;
 
     protected int id;
     protected Point2D.Double position;

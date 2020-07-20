@@ -20,14 +20,16 @@ public class WorldPane extends JPanel {
         final Graphics2D graphics2D = (Graphics2D) g;
         graphics2D.setColor(Color.BLACK);
         graphics2D.fillRect(0, 0, 1920, 1080);
-        graphics2D.setColor(Color.BLUE);
+
         for (MovingEntity movingEntity : worldController.getWorld().getMovingEntities()) {
+            graphics2D.setColor(Color.BLUE);
             graphics2D.fillPolygon(BirdDisplay.renderMovingEntity(movingEntity));
             renderMove(movingEntity, graphics2D);
         }
     }
 
     private void renderMove(MovingEntity movingEntity, Graphics2D graphics2D) {
+        graphics2D.setColor(Color.RED);
         var list = new ArrayList<>(movingEntity.getHistory());
         for (int i = 0; i < list.size() - 1; ++i) {
             final var from = list.get(i);
