@@ -11,7 +11,7 @@ public class WorldController {
     private MainFrame mainFrame;
 
     public void startGame() {
-        world = new World(1920, 1080, 200);
+        world = new World(1920, 1080, 500);
         mainFrame = new MainFrame(this);
 
         final TimerTask task = setupTimer(() -> {
