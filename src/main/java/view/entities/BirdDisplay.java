@@ -18,7 +18,7 @@ public class BirdDisplay {
     public static void renderFish(MovingEntity movingEntity, Graphics2D graphics2D) {
         graphics2D.rotate(movingEntity.getAngleInRadian() - Math.PI / 2, (int) movingEntity.getPosition().x, (int) movingEntity.getPosition().y);
         List<BufferedImage> fishSprites = BirdSprites.FISH_SPRITES.get(movingEntity.getId() % BirdSprites.FISH_SPRITES.size());
-        graphics2D.drawImage(fishSprites.get(0), null, (int) movingEntity.getPosition().x - 16, (int) movingEntity.getPosition().y - 16);
+        graphics2D.drawImage(fishSprites.get(movingEntity.getIdSprite()), null, (int) movingEntity.getPosition().x - 16, (int) movingEntity.getPosition().y - 16);
         graphics2D.rotate(-movingEntity.getAngleInRadian() + Math.PI / 2, (int) movingEntity.getPosition().x, (int) movingEntity.getPosition().y);
     }
 

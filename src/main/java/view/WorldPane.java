@@ -18,14 +18,14 @@ public class WorldPane extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         final Graphics2D graphics2D = (Graphics2D) g;
-        graphics2D.setColor(Color.BLACK);
+        graphics2D.setColor(new Color(55, 98, 140));
         graphics2D.fillRect(0, 0, 1920, 1080);
 
         for (MovingEntity movingEntity : worldController.getWorld().getMovingEntities()) {
             //graphics2D.setColor(Color.BLUE);
             //graphics2D.fillPolygon(BirdDisplay.renderMovingEntity(movingEntity));
             BirdDisplay.renderFish(movingEntity, graphics2D);
-            renderMove(movingEntity, graphics2D);
+            //renderMove(movingEntity, graphics2D);
         }
     }
 

@@ -11,6 +11,8 @@ public abstract class MovingEntity {
     protected final static double TOO_FAR_DISTANCE = 160;
     protected final static int SPEED = 300;
     protected final static int MAX_HISTORY = 100;
+    protected int idSprite = 0;
+    protected double lastChangeIdTime;
 
     protected int id;
     protected Point2D.Double position;
@@ -25,6 +27,7 @@ public abstract class MovingEntity {
         this.world = world;
         this.position = new Point2D.Double(posX, posY);
         this.lastMoveTime = System.currentTimeMillis();
+        this.lastChangeIdTime = this.lastMoveTime;
     }
 
     public abstract double getAngleInRadian();
@@ -74,5 +77,9 @@ public abstract class MovingEntity {
 
     public int getId() {
         return id;
+    }
+
+    public int getIdSprite() {
+        return idSprite;
     }
 }

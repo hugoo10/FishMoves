@@ -26,6 +26,7 @@ public class Bird extends MovingEntity {
         matchPoint();
         limitSpeed(time);
         bounce();
+        this.updateIdSprite(time);
         this.lastMoveTime = time;
         this.position.setLocation(this.position.x + this.dX, this.position.y + this.dY);
         this.addMove(new Point2D.Double(this.position.x, this.position.y));
@@ -104,6 +105,16 @@ public class Bird extends MovingEntity {
         if (speed > SPEED) {
             this.dX = (this.dX / speed) * SPEED;
             this.dY = (this.dY / speed) * SPEED;
+        }
+    }
+
+    public void updateIdSprite(long time) {
+        final double delayInSeconds = (time - this.lastMoveTime) / 1000D;
+        final double speed = Math.sqrt(this.dX * this.dX + this.dY * this.dY) / delayInSeconds;
+        final double delaySprite = (time - this.lastChangeIdTime) / 1000D;
+        if (speed > 0 && (10 / speed) < delaySprite) {
+            this.idSprite = (this.idSprite + 1) % 4;
+            this.lastChangeIdTime = time;
         }
     }
 }
