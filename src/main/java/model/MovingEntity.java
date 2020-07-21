@@ -71,4 +71,8 @@ public abstract class MovingEntity {
     public Queue<Point2D.Double> getHistory() {
         return history;
     }
+
+    public int getId() {
+        return id;
+    }
 }

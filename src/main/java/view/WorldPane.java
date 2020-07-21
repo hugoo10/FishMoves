@@ -22,8 +22,9 @@ public class WorldPane extends JPanel {
         graphics2D.fillRect(0, 0, 1920, 1080);
 
         for (MovingEntity movingEntity : worldController.getWorld().getMovingEntities()) {
-            graphics2D.setColor(Color.BLUE);
-            graphics2D.fillPolygon(BirdDisplay.renderMovingEntity(movingEntity));
+            //graphics2D.setColor(Color.BLUE);
+            //graphics2D.fillPolygon(BirdDisplay.renderMovingEntity(movingEntity));
+            BirdDisplay.renderFish(movingEntity, graphics2D);
             renderMove(movingEntity, graphics2D);
         }
     }
