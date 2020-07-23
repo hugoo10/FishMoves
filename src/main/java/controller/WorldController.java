@@ -1,5 +1,6 @@
 package controller;
 
+import javafx.stage.Stage;
 import model.World;
 import view.MainFrame;
 
@@ -10,18 +11,19 @@ public class WorldController {
     private World world;
     private MainFrame mainFrame;
 
-    public void startGame() {
+    public void startGame(Stage stage) {
         world = new World(1920, 1080, 200);
-        mainFrame = new MainFrame(this);
+        mainFrame = new MainFrame(this, stage);
 
         final TimerTask task = setupTimer(() -> {
             this.world.tick();
-            this.mainFrame.repaint();
         });
         Timer timer = new Timer("Timer");
         long delay = 1000L / 60;
         timer.scheduleAtFixedRate(task, 0, delay);
-
+        /*for(;;) {
+            this.mainFrame.repaint();
+        }*/
     }
 
     private TimerTask setupTimer(Runnable runnable) {
