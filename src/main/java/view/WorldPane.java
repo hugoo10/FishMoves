@@ -1,6 +1,7 @@
 package view;
 
 import controller.WorldController;
+import javafx.scene.Scene;
 import model.MovingEntity;
 import view.entities.BirdDisplay;
 
@@ -8,14 +9,16 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class WorldPane extends JPanel {
+public class WorldPane {
     private final WorldController worldController;
+    private final Scene scene;
 
-    public WorldPane(WorldController worldController) {
+    public WorldPane(WorldController worldController, Scene scene) {
         this.worldController = worldController;
+        this.scene = scene;
     }
 
-    @Override
+
     protected void paintComponent(Graphics g) {
         final Graphics2D graphics2D = (Graphics2D) g;
         graphics2D.setColor(new Color(55, 98, 140));

@@ -7,16 +7,14 @@ import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-import javax.swing.*;
-
-public class MainFrame extends JFrame {
+public class MainFrame {
     private final WorldPane worldPane;
     private final WorldController worldController;
 
     public MainFrame(WorldController worldController, Stage stage) {
         stage.setFullScreen(true);
         this.worldController = worldController;
-        this.worldPane = new WorldPane(worldController);
+
         Scene scene = new Scene(new Group());
         scene.setFill(Color.BLACK);
         stage.setTitle("Mars lander");
@@ -26,6 +24,7 @@ public class MainFrame extends JFrame {
             Platform.exit();
             System.exit(0);
         });
+        this.worldPane = new WorldPane(worldController, scene);
 
 
         /*super("birds");
@@ -42,6 +41,6 @@ public class MainFrame extends JFrame {
     }
 
     public void repaint() {
-        this.worldPane.repaint();
+        //this.worldPane.repaint();
     }
 }

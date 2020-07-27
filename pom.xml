@@ -55,12 +55,6 @@
             <artifactId>javafx-fxml</artifactId>
             <version>${javafx.version}</version>
         </dependency>
-
-        <dependency>
-            <groupId>fr.huk</groupId>
-            <artifactId>hukutils</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
     </dependencies>
     <build>
         <plugins>
