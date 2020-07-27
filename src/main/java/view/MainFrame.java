@@ -15,7 +15,8 @@ public class MainFrame {
         stage.setFullScreen(true);
         this.worldController = worldController;
 
-        Scene scene = new Scene(new Group());
+        Group group = new Group();
+        Scene scene = new Scene(group);
         scene.setFill(Color.BLACK);
         stage.setTitle("Mars lander");
         stage.setScene(scene);
@@ -24,7 +25,7 @@ public class MainFrame {
             Platform.exit();
             System.exit(0);
         });
-        this.worldPane = new WorldPane(worldController, scene);
+        this.worldPane = new WorldPane(worldController, group);
 
 
         /*super("birds");
@@ -41,6 +42,6 @@ public class MainFrame {
     }
 
     public void repaint() {
-        //this.worldPane.repaint();
+        this.worldPane.repaint();
     }
 }

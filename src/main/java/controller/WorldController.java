@@ -24,6 +24,7 @@ public class WorldController {
         /*for(;;) {
             this.mainFrame.repaint();
         }*/
+        this.mainFrame.repaint();
     }
 
     private TimerTask setupTimer(Runnable runnable) {

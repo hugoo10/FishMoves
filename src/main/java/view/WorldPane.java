@@ -1,23 +1,32 @@
 package view;
 
 import controller.WorldController;
-import javafx.scene.Scene;
+import javafx.scene.Group;
+import javafx.scene.shape.Polygon;
 import model.MovingEntity;
 import view.entities.BirdDisplay;
 
-import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
 public class WorldPane {
     private final WorldController worldController;
-    private final Scene scene;
+    private final Group group;
 
-    public WorldPane(WorldController worldController, Scene scene) {
+    public WorldPane(WorldController worldController, Group group) {
         this.worldController = worldController;
-        this.scene = scene;
+        this.group = group;
     }
 
+
+    public void repaint() {
+        Polygon polygon = new Polygon(12, 0, -6, 6, -6, -6);
+        polygon.setTranslateY(500);
+        polygon.setTranslateX(1000);
+        polygon.setStroke(javafx.scene.paint.Color.BLUE);
+        polygon.setFill(javafx.scene.paint.Color.BLUE);
+        group.getChildren().add(polygon);
+    }
 
     protected void paintComponent(Graphics g) {
         final Graphics2D graphics2D = (Graphics2D) g;
@@ -25,8 +34,8 @@ public class WorldPane {
         graphics2D.fillRect(0, 0, 1920, 1080);
 
         worldController.getWorld().getMovingEntities().parallelStream().forEach(movingEntity -> {
-            BirdDisplay.renderFish(movingEntity, (Graphics2D)graphics2D.create());
-            renderMove(movingEntity, (Graphics2D)graphics2D.create());
+            BirdDisplay.renderFish(movingEntity, (Graphics2D) graphics2D.create());
+            renderMove(movingEntity, (Graphics2D) graphics2D.create());
         });
     }
 
