@@ -26,19 +26,6 @@ public class MainFrame {
             System.exit(0);
         });
         this.worldPane = new WorldPane(worldController, group);
-
-
-        /*super("birds");
-        this.worldController = worldController;
-        this.worldPane = new WorldPane(worldController);
-        this.setContentPane(this.worldPane);
-
-        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        this.setUndecorated(true);
-        this.setVisible(true);
-
-        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        this.setVisible(true);*/
     }
 
     public void repaint() {
