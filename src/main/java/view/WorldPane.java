@@ -1,6 +1,7 @@
 package view;
 
 import controller.WorldController;
+import javafx.animation.AnimationTimer;
 import javafx.scene.Group;
 import javafx.scene.shape.Polygon;
 import model.MovingEntity;
@@ -16,16 +17,27 @@ public class WorldPane {
     public WorldPane(WorldController worldController, Group group) {
         this.worldController = worldController;
         this.group = group;
+        worldController.getWorld().getMovingEntities().forEach(movingEntity -> {
+            group.getChildren().add(movingEntity.getPolygon());
+        });
     }
 
 
     public void repaint() {
-        Polygon polygon = new Polygon(12, 0, -6, 6, -6, -6);
-        polygon.setTranslateY(500);
-        polygon.setTranslateX(1000);
-        polygon.setStroke(javafx.scene.paint.Color.BLUE);
-        polygon.setFill(javafx.scene.paint.Color.BLUE);
-        group.getChildren().add(polygon);
+        final AnimationTimer gameLoop = new AnimationTimer() {
+            @Override
+            public void handle(long l) {
+                worldController.getWorld().getMovingEntities().forEach(movingEntity -> {
+                    Polygon polygon = movingEntity.getPolygon();
+                    polygon.setTranslateY(movingEntity.getPosition().y);
+                    polygon.setTranslateX(movingEntity.getPosition().x);
+                    polygon.setStroke(javafx.scene.paint.Color.BLUE);
+                    polygon.setFill(javafx.scene.paint.Color.BLUE);
+                    polygon.setRotate(Math.toDegrees(movingEntity.getAngleInRadian()));
+                });
+            }
+        };
+        gameLoop.start();
     }
 
     protected void paintComponent(Graphics g) {

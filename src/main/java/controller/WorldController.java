@@ -21,9 +21,6 @@ public class WorldController {
         Timer timer = new Timer("Timer");
         long delay = 1000L / 60;
         timer.scheduleAtFixedRate(task, 0, delay);
-        /*for(;;) {
-            this.mainFrame.repaint();
-        }*/
         this.mainFrame.repaint();
     }
 

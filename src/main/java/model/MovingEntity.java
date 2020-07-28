@@ -1,10 +1,14 @@
 package model;
 
+import javafx.scene.shape.Polygon;
+import lombok.Getter;
+
 import java.awt.geom.Point2D;
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
+@Getter
 public abstract class MovingEntity {
     protected final static double VIEW_DISTANCE = 160;
     protected final static double TOO_CLOSE_DISTANCE = 40;
@@ -17,6 +21,9 @@ public abstract class MovingEntity {
     protected int id;
     protected Point2D.Double position;
     protected World world;
+
+
+    protected Polygon polygon = new Polygon(12, 0, -6, 6, -6, -6);
 
     protected Queue<Point2D.Double> history = new ArrayDeque<>();
     //Meta

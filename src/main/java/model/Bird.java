@@ -4,6 +4,7 @@ import java.awt.geom.Point2D;
 import java.util.List;
 import java.util.Random;
 
+
 public class Bird extends MovingEntity {
     private double dX;
     private double dY;
