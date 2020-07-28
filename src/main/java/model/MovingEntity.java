@@ -1,7 +1,9 @@
 package model;
 
-import javafx.scene.shape.Polygon;
+import javafx.scene.Node;
+import javafx.scene.image.ImageView;
 import lombok.Getter;
+import view.BirdSprites;
 
 import java.awt.geom.Point2D;
 import java.util.*;
@@ -23,7 +25,7 @@ public abstract class MovingEntity {
     protected World world;
 
 
-    protected Polygon polygon = new Polygon(12, 0, -6, 6, -6, -6);
+    protected Node node = new ImageView(BirdSprites.convertToFxImage(BirdSprites.RED_FISH.get(0)));
 
     protected Queue<Point2D.Double> history = new ArrayDeque<>();
     //Meta

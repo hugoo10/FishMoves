@@ -3,7 +3,7 @@ package view;
 import controller.WorldController;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Group;
-import javafx.scene.shape.Polygon;
+import javafx.scene.Node;
 import model.MovingEntity;
 import view.entities.BirdDisplay;
 
@@ -18,7 +18,7 @@ public class WorldPane {
         this.worldController = worldController;
         this.group = group;
         worldController.getWorld().getMovingEntities().forEach(movingEntity -> {
-            group.getChildren().add(movingEntity.getPolygon());
+            group.getChildren().add(movingEntity.getNode());
         });
     }
 
@@ -28,12 +28,12 @@ public class WorldPane {
             @Override
             public void handle(long l) {
                 worldController.getWorld().getMovingEntities().forEach(movingEntity -> {
-                    Polygon polygon = movingEntity.getPolygon();
+                    Node polygon = movingEntity.getNode();
                     polygon.setTranslateY(movingEntity.getPosition().y);
                     polygon.setTranslateX(movingEntity.getPosition().x);
-                    polygon.setStroke(javafx.scene.paint.Color.BLUE);
-                    polygon.setFill(javafx.scene.paint.Color.BLUE);
-                    polygon.setRotate(Math.toDegrees(movingEntity.getAngleInRadian()));
+                    //((Polygon)polygon).setStroke(javafx.scene.paint.Color.BLUE);
+                    //((Polygon)polygon).setFill(javafx.scene.paint.Color.BLUE);
+                    polygon.setRotate((Math.toDegrees(movingEntity.getAngleInRadian()) - 90 )% 360);
                 });
             }
         };
