@@ -1,9 +1,7 @@
 package model;
 
-import javafx.scene.Node;
-import javafx.scene.image.ImageView;
+import javafx.scene.Group;
 import lombok.Getter;
-import view.BirdSprites;
 
 import java.awt.geom.Point2D;
 import java.util.*;
@@ -23,9 +21,7 @@ public abstract class MovingEntity {
     protected int id;
     protected Point2D.Double position;
     protected World world;
-
-
-    protected Node node = new ImageView(BirdSprites.convertToFxImage(BirdSprites.RED_FISH.get(0)));
+    protected Group node = new Group();
 
     protected Queue<Point2D.Double> history = new ArrayDeque<>();
     //Meta

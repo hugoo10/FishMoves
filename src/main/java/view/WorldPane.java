@@ -6,7 +6,7 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import model.MovingEntity;
 import view.entities.BirdDisplay;
-
+import model.Bird;
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -24,16 +24,16 @@ public class WorldPane {
 
 
     public void repaint() {
+        long time = System.currentTimeMillis();
         final AnimationTimer gameLoop = new AnimationTimer() {
             @Override
             public void handle(long l) {
                 worldController.getWorld().getMovingEntities().forEach(movingEntity -> {
+                    ((Bird)movingEntity).getMovingStateContext().setNewCurrentNode(time, ((Bird)movingEntity));
                     Node polygon = movingEntity.getNode();
                     polygon.setTranslateY(movingEntity.getPosition().y);
                     polygon.setTranslateX(movingEntity.getPosition().x);
-                    //((Polygon)polygon).setStroke(javafx.scene.paint.Color.BLUE);
-                    //((Polygon)polygon).setFill(javafx.scene.paint.Color.BLUE);
-                    polygon.setRotate((Math.toDegrees(movingEntity.getAngleInRadian()) - 90 )% 360);
+                    polygon.setRotate((Math.toDegrees(movingEntity.getAngleInRadian()) - 90) % 360);
                 });
             }
         };
