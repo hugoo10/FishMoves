@@ -1,8 +1,6 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class World {
     private final double width;
@@ -33,5 +31,20 @@ public class World {
     public void tick() {
         long time = System.currentTimeMillis();
         movingEntities.parallelStream().forEach(movingEntity -> movingEntity.move(time));
+    }
+
+    public void runWorld() {
+        final TimerTask task = setupTimer(this::tick);
+        Timer timer = new Timer();
+        long period = 1000L / 60;
+        timer.scheduleAtFixedRate(task, 0, period);
+    }
+
+    private TimerTask setupTimer(Runnable runnable) {
+        return new TimerTask() {
+            public void run() {
+                runnable.run();
+            }
+        };
     }
 }
