@@ -2,8 +2,8 @@ package model.state;
 
 import javafx.scene.image.ImageView;
 import model.Fish;
-import model.FishView;
 import view.FishSprites;
+import view.FishView;
 
 public class MovingState {
     private int currentTailPosition;

@@ -1,5 +1,7 @@
 package model;
 
+import view.FishView;
+
 import java.awt.geom.Point2D;
 
 public class Fish extends MovingEntity {

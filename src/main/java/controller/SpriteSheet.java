@@ -17,11 +17,6 @@ public class SpriteSheet {
         return sprites.size();
     }
 
-    public Image getSprite(double progress) {
-        int frame = (int) (count() * progress);
-        return sprites.get(frame);
-    }
-
     public List<Image> getSprites() {
         return sprites;
     }

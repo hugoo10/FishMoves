@@ -34,10 +34,10 @@ public class ResourceLoader {
         }
     }
 
-    private void addFishSprite(List<Image> bufferedImageList, SpriteSheet spriteSheet, int fromIdx) {
-        bufferedImageList.add(spriteSheet.getSprites().get(fromIdx));
-        bufferedImageList.add(spriteSheet.getSprites().get(fromIdx + 1));
-        bufferedImageList.add(spriteSheet.getSprites().get(fromIdx + 2));
-        bufferedImageList.add(spriteSheet.getSprites().get(fromIdx + 1));
+    private void addFishSprite(List<Image> imageList, SpriteSheet spriteSheet, int fromIdx) {
+        imageList.add(spriteSheet.getSprites().get(fromIdx));
+        imageList.add(spriteSheet.getSprites().get(fromIdx + 1));
+        imageList.add(spriteSheet.getSprites().get(fromIdx + 2));
+        imageList.add(spriteSheet.getSprites().get(fromIdx + 1));
     }
 }

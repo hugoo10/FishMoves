@@ -9,11 +9,9 @@ import javafx.stage.Stage;
 
 public class MainFrame {
     private final WorldPane worldPane;
-    private final WorldController worldController;
 
     public MainFrame(WorldController worldController, Stage stage) {
         stage.setFullScreen(true);
-        this.worldController = worldController;
 
         Group group = new Group();
         Scene scene = new Scene(group);

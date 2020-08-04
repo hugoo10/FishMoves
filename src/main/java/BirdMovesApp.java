@@ -5,8 +5,8 @@ import javafx.stage.Stage;
 
 public class BirdMovesApp extends Application {
     @Override
-    public void start(Stage stage) throws Exception {
-            new ResourceLoader().loadBirdSprites();
-            new WorldController().startGame(stage);
+    public void start(Stage stage) {
+        new ResourceLoader().loadBirdSprites();
+        new WorldController().startGame(stage);
     }
 }

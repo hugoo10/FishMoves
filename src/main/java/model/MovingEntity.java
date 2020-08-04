@@ -86,10 +86,6 @@ public abstract class MovingEntity {
         return history;
     }
 
-    public int getId() {
-        return id;
-    }
-
     public void bounce() {
         if (position.x + dX < 20 || position.x + dX >= 1900) {
             this.dX = -dX;
@@ -143,8 +139,8 @@ public abstract class MovingEntity {
         List<MovingEntity> toMatch = getClosestWithAdditionalBehaviour((movingEntity, point) -> {
             if (movingEntity.position.distance(this.position) <= TOO_FAR_DISTANCE && movingEntity.position.distance(this.position) >= TOO_CLOSE_DISTANCE) {
                 point.setLocation(
-                        point.x + ((Fish) movingEntity).dX,
-                        point.y + ((Fish) movingEntity).dY
+                        point.x + movingEntity.dX,
+                        point.y + movingEntity.dY
                 );
                 return movingEntity;
             }
