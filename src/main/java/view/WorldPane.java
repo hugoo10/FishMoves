@@ -4,9 +4,9 @@ import controller.WorldController;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import model.MovingEntity;
-import view.entities.BirdDisplay;
 import model.Bird;
+import model.MovingEntity;
+
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -38,17 +38,6 @@ public class WorldPane {
             }
         };
         gameLoop.start();
-    }
-
-    protected void paintComponent(Graphics g) {
-        final Graphics2D graphics2D = (Graphics2D) g;
-        graphics2D.setColor(new Color(55, 98, 140));
-        graphics2D.fillRect(0, 0, 1920, 1080);
-
-        worldController.getWorld().getMovingEntities().parallelStream().forEach(movingEntity -> {
-            BirdDisplay.renderFish(movingEntity, (Graphics2D) graphics2D.create());
-            renderMove(movingEntity, (Graphics2D) graphics2D.create());
-        });
     }
 
     private void renderMove(MovingEntity movingEntity, Graphics2D graphics2D) {

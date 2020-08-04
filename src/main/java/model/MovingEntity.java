@@ -1,6 +1,5 @@
 package model;
 
-import javafx.scene.Group;
 import lombok.Getter;
 
 import java.awt.geom.Point2D;
@@ -21,7 +20,8 @@ public abstract class MovingEntity {
     protected int id;
     protected Point2D.Double position;
     protected World world;
-    protected Group node = new Group();
+    protected double dX;
+    protected double dY;
 
     protected Queue<Point2D.Double> history = new ArrayDeque<>();
     //Meta
@@ -33,9 +33,16 @@ public abstract class MovingEntity {
         this.position = new Point2D.Double(posX, posY);
         this.lastMoveTime = System.currentTimeMillis();
         this.lastChangeIdTime = this.lastMoveTime;
+        this.dX = new Random().nextDouble() * 20 - 10;
+        this.dY = new Random().nextDouble() * 20 - 10;
     }
 
     public abstract double getAngleInRadian();
+
+
+    public double getAngleInDegree() {
+        return Math.toDegrees(getAngleInRadian());
+    }
 
     public abstract void move(long time);
 
