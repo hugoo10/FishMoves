@@ -1,6 +1,7 @@
 package controller;
 
-import view.BirdSprites;
+import javafx.scene.image.Image;
+import view.FishSprites;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -21,19 +22,19 @@ public class ResourceLoader {
                     withRows(8).
                     withSpriteCount(8 * 12).
                     build();
-            addFishSprite(BirdSprites.BLUE_FISH, spriteSheet, 0);
-            addFishSprite(BirdSprites.GREEN_FISH, spriteSheet, 3);
-            addFishSprite(BirdSprites.RED_FISH, spriteSheet, 6);
-            addFishSprite(BirdSprites.GREY_FISH, spriteSheet, 9);
-            addFishSprite(BirdSprites.YELLOW_FISH, spriteSheet, 48);
-            addFishSprite(BirdSprites.BLACK_FISH, spriteSheet, 51);
-            addFishSprite(BirdSprites.WHITE_FISH, spriteSheet, 54);
+            addFishSprite(FishSprites.BLUE_FISH, spriteSheet, 0);
+            addFishSprite(FishSprites.GREEN_FISH, spriteSheet, 3);
+            addFishSprite(FishSprites.RED_FISH, spriteSheet, 6);
+            addFishSprite(FishSprites.GREY_FISH, spriteSheet, 9);
+            addFishSprite(FishSprites.YELLOW_FISH, spriteSheet, 48);
+            addFishSprite(FishSprites.BLACK_FISH, spriteSheet, 51);
+            addFishSprite(FishSprites.WHITE_FISH, spriteSheet, 54);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void addFishSprite(List<BufferedImage> bufferedImageList, SpriteSheet spriteSheet, int fromIdx) {
+    private void addFishSprite(List<Image> bufferedImageList, SpriteSheet spriteSheet, int fromIdx) {
         bufferedImageList.add(spriteSheet.getSprites().get(fromIdx));
         bufferedImageList.add(spriteSheet.getSprites().get(fromIdx + 1));
         bufferedImageList.add(spriteSheet.getSprites().get(fromIdx + 2));

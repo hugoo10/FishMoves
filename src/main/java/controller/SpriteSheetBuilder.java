@@ -1,5 +1,10 @@
 package controller;
 
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.image.PixelWriter;
+import javafx.scene.image.WritableImage;
+
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
@@ -84,10 +89,10 @@ public class SpriteSheetBuilder {
 
         int x = 0;
         int y = 0;
-        List<BufferedImage> sprites = new ArrayList<>(count);
+        List<Image> sprites = new ArrayList<>(count);
 
         for (int index = 0; index < count; index++) {
-            sprites.add(sheet.getSubimage(x, y, width, height));
+            sprites.add(convertToFxImage(sheet.getSubimage(x, y, width, height)));
             x += width;
             if (x >= width * cols) {
                 x = 0;
@@ -96,5 +101,20 @@ public class SpriteSheetBuilder {
         }
 
         return new SpriteSheet(sprites);
+    }
+
+    public static Image convertToFxImage(BufferedImage image) {
+        WritableImage wr = null;
+        if (image != null) {
+            wr = new WritableImage(image.getWidth(), image.getHeight());
+            PixelWriter pw = wr.getPixelWriter();
+            for (int x = 0; x < image.getWidth(); x++) {
+                for (int y = 0; y < image.getHeight(); y++) {
+                    pw.setArgb(x, y, image.getRGB(x, y));
+                }
+            }
+        }
+
+        return new ImageView(wr).getImage();
     }
 }

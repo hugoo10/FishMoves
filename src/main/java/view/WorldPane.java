@@ -3,8 +3,7 @@ package view;
 import controller.WorldController;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Group;
-import javafx.scene.Node;
-import model.Bird;
+import model.Fish;
 import model.MovingEntity;
 
 import java.awt.*;
@@ -12,28 +11,22 @@ import java.util.ArrayList;
 
 public class WorldPane {
     private final WorldController worldController;
-    private final Group group;
 
     public WorldPane(WorldController worldController, Group group) {
         this.worldController = worldController;
-        this.group = group;
         worldController.getWorld().getMovingEntities().forEach(movingEntity -> {
-            group.getChildren().add(movingEntity.getNode());
+            group.getChildren().add(((Fish) movingEntity).getView());
         });
     }
 
 
     public void repaint() {
-        long time = System.currentTimeMillis();
         final AnimationTimer gameLoop = new AnimationTimer() {
             @Override
             public void handle(long l) {
+                long time = System.currentTimeMillis();
                 worldController.getWorld().getMovingEntities().forEach(movingEntity -> {
-                    ((Bird)movingEntity).getMovingStateContext().setNewCurrentNode(time, ((Bird)movingEntity));
-                    Node polygon = movingEntity.getNode();
-                    polygon.setTranslateY(movingEntity.getPosition().y);
-                    polygon.setTranslateX(movingEntity.getPosition().x);
-                    polygon.setRotate((Math.toDegrees(movingEntity.getAngleInRadian()) - 90) % 360);
+                    ((Fish) movingEntity).updateView(time);
                 });
             }
         };

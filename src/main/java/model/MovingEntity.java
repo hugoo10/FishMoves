@@ -14,7 +14,6 @@ public abstract class MovingEntity {
     protected final static double TOO_FAR_DISTANCE = 160;
     protected final static int SPEED = 300;
     protected final static int MAX_HISTORY = 100;
-    protected int idSprite = 0;
     protected double lastChangeIdTime;
 
     protected int id;
@@ -91,7 +90,79 @@ public abstract class MovingEntity {
         return id;
     }
 
-    public int getIdSprite() {
-        return idSprite;
+    public void bounce() {
+        if (position.x + dX < 20 || position.x + dX >= 1900) {
+            this.dX = -dX;
+        } else if (position.y + dY < 20 || position.y + dY >= 1060) {
+            this.dY = -dY;
+        }
+    }
+
+    public void avoidPoint() {
+        final Point2D.Double escapePoint = new Point2D.Double();
+        final double avoidFactor = 0.05;
+        List<MovingEntity> toAvoid = getClosestWithAdditionalBehaviour((movingEntity, point) -> {
+            if (movingEntity.position.distance(this.position) < TOO_CLOSE_DISTANCE) {
+                point.setLocation(
+                        point.x + this.position.x - movingEntity.position.x,
+                        point.y + this.position.y - movingEntity.position.y
+                );
+                return movingEntity;
+            }
+            return null;
+        }, escapePoint);
+        if (!toAvoid.isEmpty()) {
+            this.dX += escapePoint.x * avoidFactor;
+            this.dY += escapePoint.y * avoidFactor;
+        }
+    }
+
+    public void flyTowardPoint() {
+        final double flyTowardFactor = 0.005;
+        final Point2D.Double centerOfMassPoint = new Point2D.Double();
+        List<MovingEntity> toFlyTowards = getClosestWithAdditionalBehaviour((movingEntity, point) -> {
+            if (movingEntity.position.distance(this.position) > TOO_FAR_DISTANCE) {
+                point.setLocation(
+                        point.x + movingEntity.position.x,
+                        point.y + movingEntity.position.y
+                );
+                return movingEntity;
+            }
+            return null;
+        }, centerOfMassPoint);
+        if (!toFlyTowards.isEmpty()) {
+            centerOfMassPoint.setLocation(centerOfMassPoint.x / toFlyTowards.size(), centerOfMassPoint.y / toFlyTowards.size());
+            this.dX += (centerOfMassPoint.x - this.position.x) * flyTowardFactor;
+            this.dY += (centerOfMassPoint.y - this.position.y) * flyTowardFactor;
+        }
+    }
+
+    public void matchPoint() {
+        final double matchFactor = 0.05;
+        final Point2D.Double averageVelocity = new Point2D.Double();
+        List<MovingEntity> toMatch = getClosestWithAdditionalBehaviour((movingEntity, point) -> {
+            if (movingEntity.position.distance(this.position) <= TOO_FAR_DISTANCE && movingEntity.position.distance(this.position) >= TOO_CLOSE_DISTANCE) {
+                point.setLocation(
+                        point.x + ((Fish) movingEntity).dX,
+                        point.y + ((Fish) movingEntity).dY
+                );
+                return movingEntity;
+            }
+            return null;
+        }, averageVelocity);
+        if (!toMatch.isEmpty()) {
+            averageVelocity.setLocation(averageVelocity.x / toMatch.size(), averageVelocity.y / toMatch.size());
+            this.dX += (averageVelocity.x - this.dX) * matchFactor;
+            this.dY += (averageVelocity.y - this.dY) * matchFactor;
+        }
+    }
+
+    public void limitSpeed(long time) {
+        final double delayInSeconds = (time - this.lastMoveTime) / 1000D;
+        final double speed = Math.sqrt(this.dX * this.dX + this.dY * this.dY) / delayInSeconds;
+        if (speed > SPEED) {
+            this.dX = (this.dX / speed) * SPEED;
+            this.dY = (this.dY / speed) * SPEED;
+        }
     }
 }

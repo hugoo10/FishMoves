@@ -14,7 +14,7 @@ public class World {
         this.height = height;
         this.movingEntities = new ArrayList<>();
         for (int i = 0; i < nbBirds; ++i) {
-            this.movingEntities.add(new Bird(i, randomWithMargin((int) this.width, 400), randomWithMargin((int) this.height, 200), this));
+            this.movingEntities.add(new Fish(i, randomWithMargin((int) this.width, 400), randomWithMargin((int) this.height, 200), this));
         }
     }
 

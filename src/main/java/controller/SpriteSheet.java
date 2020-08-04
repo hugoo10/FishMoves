@@ -1,14 +1,15 @@
 package controller;
 
-import java.awt.image.BufferedImage;
+import javafx.scene.image.Image;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class SpriteSheet {
 
-    private final List<BufferedImage> sprites;
+    private final List<Image> sprites;
 
-    public SpriteSheet(List<BufferedImage> sprites) {
+    public SpriteSheet(List<Image> sprites) {
         this.sprites = new ArrayList<>(sprites);
     }
 
@@ -16,12 +17,12 @@ public class SpriteSheet {
         return sprites.size();
     }
 
-    public BufferedImage getSprite(double progress) {
+    public Image getSprite(double progress) {
         int frame = (int) (count() * progress);
         return sprites.get(frame);
     }
 
-    public List<BufferedImage> getSprites() {
+    public List<Image> getSprites() {
         return sprites;
     }
 }
