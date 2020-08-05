@@ -10,13 +10,13 @@ public class FishView extends ImageView {
     private final MovingStateContext movingStateContext;
     private final int idSprite;
 
-    public FishView() {
+    public FishView(Fish fish) {
         this.idSprite = new Random().nextInt(FishSprites.FISH_SPRITES.size());
-        this.movingStateContext = new MovingStateContext();
+        this.movingStateContext = new MovingStateContext(fish);
     }
 
     public void updateView(Fish fish, long time) {
-        this.movingStateContext.setNewCurrentNode(time, fish, this);
+        this.movingStateContext.setNewCurrentNode(time);
         this.setTranslateX(fish.getPosition().x);
         this.setTranslateY(fish.getPosition().y);
         this.setRotate((fish.getAngleInDegree() - 90) % 360);

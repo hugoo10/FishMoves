@@ -10,7 +10,7 @@ public class Fish extends MovingEntity {
 
     public Fish(int id, double posX, double posY, World world) {
         super(id, posX, posY, world);
-        this.view = new FishView();
+        this.view = new FishView(this);
     }
 
     @Override

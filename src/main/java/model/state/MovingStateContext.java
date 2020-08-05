@@ -1,6 +1,5 @@
 package model.state;
 
-import javafx.scene.image.ImageView;
 import lombok.Setter;
 import model.Fish;
 
@@ -8,11 +7,11 @@ import model.Fish;
 public class MovingStateContext {
     private MovingState state;
 
-    public MovingStateContext() {
-        this.state = new MovingState(0, System.currentTimeMillis());
+    public MovingStateContext(Fish fish) {
+        this.state = new MovingState(0, System.currentTimeMillis(), fish);
     }
 
-    public void setNewCurrentNode(long time, Fish fish, ImageView imageView) {
-        state.setNewCurrentNode(this, time, fish, imageView);
+    public void setNewCurrentNode(long time) {
+        state.setNewCurrentNode(this, time);
     }
 }
