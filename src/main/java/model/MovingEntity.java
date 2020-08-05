@@ -22,8 +22,7 @@ public abstract class MovingEntity {
     protected int id;
     protected Point2D position;
     protected World world;
-    protected double dX;
-    protected double dY;
+    protected Point2D delta;
 
     protected Queue<Point2D> history = new ArrayDeque<>();
     //Meta
@@ -35,8 +34,7 @@ public abstract class MovingEntity {
         this.position = new Point2D(posX, posY);
         this.lastMoveTime = System.currentTimeMillis();
         this.lastChangeIdTime = this.lastMoveTime;
-        this.dX = new Random().nextDouble() * 20 - 10;
-        this.dY = new Random().nextDouble() * 20 - 10;
+        this.delta = new Point2D(new Random().nextDouble() * 20 - 10, new Random().nextDouble() * 20 - 10);
     }
 
     public abstract double getAngleInRadian();
@@ -83,10 +81,10 @@ public abstract class MovingEntity {
     }
 
     public void bounce() {
-        if (position.getX() + dX < 20 || position.getX() + dX >= 1900) {
-            this.dX = -dX;
-        } else if (position.getY() + dY < 20 || position.getY() + dY >= 1060) {
-            this.dY = -dY;
+        if (position.getX() + delta.getX() < 20 || position.getX() + delta.getX() >= 1900) {
+            this.delta = new Point2D(-delta.getX(), delta.getY());
+        } else if (position.getY() + delta.getY() < 20 || position.getY() + delta.getY() >= 1060) {
+            this.delta = new Point2D(delta.getX(), -delta.getY());
         }
     }
 
@@ -96,10 +94,9 @@ public abstract class MovingEntity {
                 movingEntity -> new CountResult(this.position.subtract(movingEntity.position), 1),
                 CountResult::add
         )
-                .ifPresent(escapePoint -> {
-                    this.dX += escapePoint.getPoint2D().getX() * avoidFactor;
-                    this.dY += escapePoint.getPoint2D().getY() * avoidFactor;
-                });
+                .ifPresent(escapePoint ->
+                        this.delta = this.delta.add(escapePoint.getPoint2D()).multiply(avoidFactor)
+                );
 
     }
 
@@ -109,10 +106,9 @@ public abstract class MovingEntity {
                 CountResult::fromMovingEntityPosition,
                 CountResult::add
         )
-                .ifPresent(centerOfMassPoint -> {
-                    this.dX += (centerOfMassPoint.getPoint2D().getX() - this.position.getX()) * flyTowardFactor;
-                    this.dY += (centerOfMassPoint.getPoint2D().getY() - this.position.getY()) * flyTowardFactor;
-                });
+                .ifPresent(centerOfMassPoint ->
+                        this.delta = this.delta.add(centerOfMassPoint.getPoint2D()).subtract(this.position).multiply(flyTowardFactor)
+                );
     }
 
     public void matchPoint() {
@@ -122,18 +118,20 @@ public abstract class MovingEntity {
                 CountResult::add
         )
                 .ifPresent(averageVelocity -> {
-                    Point2D averageVelocityPt = averageVelocity.getPoint2D().multiply(1D / averageVelocity.getNumber());
-                    this.dX += (averageVelocityPt.getX() - this.dX) * matchFactor;
-                    this.dY += (averageVelocityPt.getY() - this.dY) * matchFactor;
+                    final Point2D averageVelocityPt = averageVelocity.getPoint2D().multiply(1D / averageVelocity.getNumber());
+                    this.delta = averageVelocityPt.subtract(this.delta).multiply(matchFactor);
                 });
     }
 
     public void limitSpeed(long time) {
-        final double delayInSeconds = (time - this.lastMoveTime) / 1000D;
-        final double speed = Math.sqrt(this.dX * this.dX + this.dY * this.dY) / delayInSeconds;
+        final double speed = getSpeed(time);
         if (speed > SPEED) {
-            this.dX = (this.dX / speed) * SPEED;
-            this.dY = (this.dY / speed) * SPEED;
+            this.delta = this.delta.multiply(1D / speed).multiply(SPEED);
         }
+    }
+
+    public double getSpeed(long time) {
+        final double delayInSeconds = (time - this.lastMoveTime) / 1000D;
+        return Math.sqrt(this.delta.getX() * this.delta.getX() + this.delta.getY() * this.delta.getY()) / delayInSeconds;
     }
 }

@@ -14,7 +14,7 @@ public class Fish extends MovingEntity {
 
     @Override
     public double getAngleInRadian() {
-        return Math.atan(this.dY / this.dX) + (this.dX < 0 ? Math.PI : 0);
+        return Math.atan(this.delta.getY() / this.delta.getX()) + (this.delta.getX() < 0 ? Math.PI : 0);
     }
 
     @Override
@@ -25,7 +25,7 @@ public class Fish extends MovingEntity {
         limitSpeed(time);
         bounce();
         this.lastMoveTime = time;
-        this.position = this.position.add(this.dX, this.dY);
+        this.position = this.position.add(this.delta);
         this.addMove(this.position);
     }
 

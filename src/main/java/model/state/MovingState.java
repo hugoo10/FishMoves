@@ -18,8 +18,7 @@ public class MovingState {
     }
 
     public void setNewCurrentNode(MovingStateContext context, long time) {
-        final double delayInSeconds = (time - fish.getLastMoveTime()) / 1000D;
-        final double speed = Math.sqrt(fish.getDX() * fish.getDX() + fish.getDY() * fish.getDY()) / delayInSeconds;
+        final double speed = this.fish.getSpeed(time);
         final double delaySprite = (time - this.timeCalled) / 1000D;
         if (speed > 0 && (10 / speed) < delaySprite) {
             context.setState(new MovingState((this.currentTailPosition + 1) % 4, time, this.fish));
