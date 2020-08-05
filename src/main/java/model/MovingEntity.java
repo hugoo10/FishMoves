@@ -95,7 +95,7 @@ public abstract class MovingEntity {
                 CountResult::add
         )
                 .ifPresent(escapePoint ->
-                        this.delta = this.delta.add(escapePoint.getPoint2D()).multiply(avoidFactor)
+                        this.delta = this.delta.add(escapePoint.getPoint2D().multiply(avoidFactor))
                 );
 
     }
@@ -107,7 +107,7 @@ public abstract class MovingEntity {
                 CountResult::add
         )
                 .ifPresent(centerOfMassPoint ->
-                        this.delta = this.delta.add(centerOfMassPoint.getPoint2D()).subtract(this.position).multiply(flyTowardFactor)
+                        this.delta = this.delta.add(centerOfMassPoint.getPoint2D().subtract(this.position).multiply(flyTowardFactor))
                 );
     }
 
@@ -119,7 +119,7 @@ public abstract class MovingEntity {
         )
                 .ifPresent(averageVelocity -> {
                     final Point2D averageVelocityPt = averageVelocity.getPoint2D().multiply(1D / averageVelocity.getNumber());
-                    this.delta = averageVelocityPt.subtract(this.delta).multiply(matchFactor);
+                    this.delta = this.delta.add(averageVelocityPt.subtract(this.delta).multiply(matchFactor));
                 });
     }
 
