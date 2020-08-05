@@ -30,7 +30,7 @@ public abstract class MovingEntity {
         this.position = new Point2D(posX, posY);
         this.lastMoveTime = System.currentTimeMillis();
         this.lastChangeIdTime = this.lastMoveTime;
-        this.delta = new Point2D(new Random().nextDouble() * 20 - 10, new Random().nextDouble() * 20 - 10);
+        this.delta = new Point2D(new Random().nextDouble(), new Random().nextDouble()).multiply(2).multiply(Variables.SPEED).subtract(new Point2D(Variables.SPEED, Variables.SPEED));
     }
 
     public abstract double getAngleInRadian();
