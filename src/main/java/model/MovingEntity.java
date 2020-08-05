@@ -2,6 +2,7 @@ package model;
 
 import javafx.geometry.Point2D;
 import lombok.Getter;
+import util.Variables;
 
 import java.util.ArrayDeque;
 import java.util.Optional;
@@ -13,21 +14,15 @@ import java.util.function.Predicate;
 
 @Getter
 public abstract class MovingEntity {
-    protected final static double VIEW_DISTANCE = 160;
-    protected final static double TOO_CLOSE_DISTANCE = 40;
-    protected final static double TOO_FAR_DISTANCE = 160;
-    protected final static int SPEED = 300;
-    protected final static int MAX_HISTORY = 100;
-    protected double lastChangeIdTime;
-
     protected int id;
     protected Point2D position;
-    protected World world;
     protected Point2D delta;
 
+    protected World world;
     protected Queue<Point2D> history = new ArrayDeque<>();
     //Meta
     protected long lastMoveTime;
+    protected double lastChangeIdTime;
 
     public MovingEntity(int id, double posX, double posY, World world) {
         this.id = id;
@@ -54,7 +49,7 @@ public abstract class MovingEntity {
     public Optional<CountResult> computeCountResult(Predicate<MovingEntity> filter, Function<MovingEntity, CountResult> mapper, BinaryOperator<CountResult> reducer) {
         return this.world.getMovingEntities().stream()
                 .filter(bird -> bird.id != this.id)
-                .filter(bird -> bird.position.distance(this.position) < VIEW_DISTANCE)
+                .filter(bird -> bird.position.distance(this.position) < Variables.VIEW_DISTANCE)
                 .filter(filter)
                 .map(mapper)
                 .reduce(reducer);
@@ -62,7 +57,7 @@ public abstract class MovingEntity {
 
     protected void addMove(Point2D move) {
         this.history.add(move);
-        if (this.history.size() > MAX_HISTORY) {
+        if (this.history.size() > Variables.MAX_HISTORY) {
             this.history.remove();
         }
     }
@@ -81,7 +76,7 @@ public abstract class MovingEntity {
 
     public void avoidPoint() {
         final double avoidFactor = 0.05;
-        computeCountResult(movingEntity -> movingEntity.position.distance(this.position) < TOO_CLOSE_DISTANCE,
+        computeCountResult(movingEntity -> movingEntity.position.distance(this.position) < Variables.TOO_CLOSE_DISTANCE,
                 movingEntity -> new CountResult(this.position.subtract(movingEntity.position), 1),
                 CountResult::add
         )
@@ -93,7 +88,7 @@ public abstract class MovingEntity {
 
     public void flyTowardPoint() {
         final double flyTowardFactor = 0.005;
-        computeCountResult(movingEntity -> movingEntity.position.distance(this.position) > TOO_FAR_DISTANCE,
+        computeCountResult(movingEntity -> movingEntity.position.distance(this.position) > Variables.TOO_FAR_DISTANCE,
                 CountResult::fromMovingEntityPosition,
                 CountResult::add
         )
@@ -104,7 +99,7 @@ public abstract class MovingEntity {
 
     public void matchPoint() {
         final double matchFactor = 0.05;
-        computeCountResult(movingEntity -> movingEntity.position.distance(this.position) <= TOO_FAR_DISTANCE && movingEntity.position.distance(this.position) >= TOO_CLOSE_DISTANCE,
+        computeCountResult(movingEntity -> movingEntity.position.distance(this.position) <= Variables.TOO_FAR_DISTANCE && movingEntity.position.distance(this.position) >= Variables.TOO_CLOSE_DISTANCE,
                 CountResult::fromMovingEntityDelta,
                 CountResult::add
         )
@@ -116,8 +111,8 @@ public abstract class MovingEntity {
 
     public void limitSpeed(long time) {
         final double speed = getSpeed(time);
-        if (speed > SPEED) {
-            this.delta = this.delta.multiply(1D / speed).multiply(SPEED);
+        if (speed > Variables.SPEED) {
+            this.delta = this.delta.multiply(1D / speed).multiply(Variables.SPEED);
         }
     }
 
