@@ -21,9 +21,9 @@ public class WorldPane {
             @Override
             public void handle(long l) {
                 long time = System.currentTimeMillis();
-                worldController.getWorld().getMovingEntities().forEach(movingEntity -> {
-                    ((Fish) movingEntity).updateView(time);
-                });
+                worldController.getWorld().getMovingEntities().forEach(movingEntity ->
+                        ((Fish) movingEntity).updateView(time)
+                );
             }
         };
         gameLoop.start();
