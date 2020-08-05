@@ -3,12 +3,13 @@ package model;
 import javafx.geometry.Point2D;
 import lombok.Getter;
 
-import java.util.*;
-import java.util.function.BiFunction;
+import java.util.ArrayDeque;
+import java.util.Optional;
+import java.util.Queue;
+import java.util.Random;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 @Getter
 public abstract class MovingEntity {
@@ -49,16 +50,6 @@ public abstract class MovingEntity {
     public Point2D getPosition() {
         return position;
     }
-
-    public <T> List<MovingEntity> getClosestWithAdditionalBehaviour(BiFunction<MovingEntity, T, MovingEntity> additional, T object) {
-        return this.world.getMovingEntities().stream()
-                .filter(bird -> bird.id != this.id)
-                .filter(bird -> bird.position.distance(this.position) < VIEW_DISTANCE)
-                .map(movingEntity -> additional.apply(movingEntity, object))
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
-    }
-
 
     public Optional<CountResult> computeCountResult(Predicate<MovingEntity> filter, Function<MovingEntity, CountResult> mapper, BinaryOperator<CountResult> reducer) {
         return this.world.getMovingEntities().stream()
