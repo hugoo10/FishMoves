@@ -2,7 +2,6 @@ package model;
 
 import view.FishView;
 
-import java.awt.geom.Point2D;
 
 public class Fish extends MovingEntity {
     private final FishView view;
@@ -26,8 +25,8 @@ public class Fish extends MovingEntity {
         limitSpeed(time);
         bounce();
         this.lastMoveTime = time;
-        this.position.setLocation(this.position.x + this.dX, this.position.y + this.dY);
-        this.addMove(new Point2D.Double(this.position.x, this.position.y));
+        this.position = this.position.add(this.dX, this.dY);
+        this.addMove(this.position);
     }
 
     public void updateView(long time) {

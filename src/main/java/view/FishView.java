@@ -17,8 +17,8 @@ public class FishView extends ImageView {
 
     public void updateView(Fish fish, long time) {
         this.movingStateContext.setNewCurrentNode(time);
-        this.setTranslateX(fish.getPosition().x);
-        this.setTranslateY(fish.getPosition().y);
+        this.setTranslateX(fish.getPosition().getX());
+        this.setTranslateY(fish.getPosition().getY());
         this.setRotate((fish.getAngleInDegree() - 90) % 360);
     }
 

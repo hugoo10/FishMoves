@@ -1,10 +1,13 @@
 package model;
 
+import javafx.geometry.Point2D;
 import lombok.Getter;
 
-import java.awt.geom.Point2D;
 import java.util.*;
 import java.util.function.BiFunction;
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Getter
@@ -17,19 +20,19 @@ public abstract class MovingEntity {
     protected double lastChangeIdTime;
 
     protected int id;
-    protected Point2D.Double position;
+    protected Point2D position;
     protected World world;
     protected double dX;
     protected double dY;
 
-    protected Queue<Point2D.Double> history = new ArrayDeque<>();
+    protected Queue<Point2D> history = new ArrayDeque<>();
     //Meta
     protected long lastMoveTime;
 
     public MovingEntity(int id, double posX, double posY, World world) {
         this.id = id;
         this.world = world;
-        this.position = new Point2D.Double(posX, posY);
+        this.position = new Point2D(posX, posY);
         this.lastMoveTime = System.currentTimeMillis();
         this.lastChangeIdTime = this.lastMoveTime;
         this.dX = new Random().nextDouble() * 20 - 10;
@@ -45,21 +48,8 @@ public abstract class MovingEntity {
 
     public abstract void move(long time);
 
-    public Point2D.Double getPosition() {
+    public Point2D getPosition() {
         return position;
-    }
-
-    public List<MovingEntity> getNClosest(int n) {
-        return getClosest().stream()
-                .limit(n)
-                .collect(Collectors.toList());
-    }
-
-    public List<MovingEntity> getClosest() {
-        return getClosestWithAdditionalBehaviour((m, o) -> m, null)
-                .stream()
-                .sorted(Comparator.comparingDouble(bird -> bird.position.distance(this.position)))
-                .collect(Collectors.toList());
     }
 
     public <T> List<MovingEntity> getClosestWithAdditionalBehaviour(BiFunction<MovingEntity, T, MovingEntity> additional, T object) {
@@ -71,86 +61,71 @@ public abstract class MovingEntity {
                 .collect(Collectors.toList());
     }
 
-    public Optional<MovingEntity> getClosestOne() {
-        return getNClosest(1).stream().findFirst();
+
+    public Optional<CountResult> computeCountResult(Predicate<MovingEntity> filter, Function<MovingEntity, CountResult> mapper, BinaryOperator<CountResult> reducer) {
+        return this.world.getMovingEntities().stream()
+                .filter(bird -> bird.id != this.id)
+                .filter(bird -> bird.position.distance(this.position) < VIEW_DISTANCE)
+                .filter(filter)
+                .map(mapper)
+                .reduce(reducer);
     }
 
-    protected void addMove(Point2D.Double move) {
+    protected void addMove(Point2D move) {
         this.history.add(move);
         if (this.history.size() > MAX_HISTORY) {
             this.history.remove();
         }
     }
 
-    public Queue<Point2D.Double> getHistory() {
+    public Queue<Point2D> getHistory() {
         return history;
     }
 
     public void bounce() {
-        if (position.x + dX < 20 || position.x + dX >= 1900) {
+        if (position.getX() + dX < 20 || position.getX() + dX >= 1900) {
             this.dX = -dX;
-        } else if (position.y + dY < 20 || position.y + dY >= 1060) {
+        } else if (position.getY() + dY < 20 || position.getY() + dY >= 1060) {
             this.dY = -dY;
         }
     }
 
     public void avoidPoint() {
-        final Point2D.Double escapePoint = new Point2D.Double();
         final double avoidFactor = 0.05;
-        List<MovingEntity> toAvoid = getClosestWithAdditionalBehaviour((movingEntity, point) -> {
-            if (movingEntity.position.distance(this.position) < TOO_CLOSE_DISTANCE) {
-                point.setLocation(
-                        point.x + this.position.x - movingEntity.position.x,
-                        point.y + this.position.y - movingEntity.position.y
-                );
-                return movingEntity;
-            }
-            return null;
-        }, escapePoint);
-        if (!toAvoid.isEmpty()) {
-            this.dX += escapePoint.x * avoidFactor;
-            this.dY += escapePoint.y * avoidFactor;
-        }
+        computeCountResult(movingEntity -> movingEntity.position.distance(this.position) < TOO_CLOSE_DISTANCE,
+                movingEntity -> new CountResult(this.position.subtract(movingEntity.position), 1),
+                CountResult::add
+        )
+                .ifPresent(escapePoint -> {
+                    this.dX += escapePoint.getPoint2D().getX() * avoidFactor;
+                    this.dY += escapePoint.getPoint2D().getY() * avoidFactor;
+                });
+
     }
 
     public void flyTowardPoint() {
         final double flyTowardFactor = 0.005;
-        final Point2D.Double centerOfMassPoint = new Point2D.Double();
-        List<MovingEntity> toFlyTowards = getClosestWithAdditionalBehaviour((movingEntity, point) -> {
-            if (movingEntity.position.distance(this.position) > TOO_FAR_DISTANCE) {
-                point.setLocation(
-                        point.x + movingEntity.position.x,
-                        point.y + movingEntity.position.y
-                );
-                return movingEntity;
-            }
-            return null;
-        }, centerOfMassPoint);
-        if (!toFlyTowards.isEmpty()) {
-            centerOfMassPoint.setLocation(centerOfMassPoint.x / toFlyTowards.size(), centerOfMassPoint.y / toFlyTowards.size());
-            this.dX += (centerOfMassPoint.x - this.position.x) * flyTowardFactor;
-            this.dY += (centerOfMassPoint.y - this.position.y) * flyTowardFactor;
-        }
+        computeCountResult(movingEntity -> movingEntity.position.distance(this.position) > TOO_FAR_DISTANCE,
+                CountResult::fromMovingEntityPosition,
+                CountResult::add
+        )
+                .ifPresent(centerOfMassPoint -> {
+                    this.dX += (centerOfMassPoint.getPoint2D().getX() - this.position.getX()) * flyTowardFactor;
+                    this.dY += (centerOfMassPoint.getPoint2D().getY() - this.position.getY()) * flyTowardFactor;
+                });
     }
 
     public void matchPoint() {
         final double matchFactor = 0.05;
-        final Point2D.Double averageVelocity = new Point2D.Double();
-        List<MovingEntity> toMatch = getClosestWithAdditionalBehaviour((movingEntity, point) -> {
-            if (movingEntity.position.distance(this.position) <= TOO_FAR_DISTANCE && movingEntity.position.distance(this.position) >= TOO_CLOSE_DISTANCE) {
-                point.setLocation(
-                        point.x + movingEntity.dX,
-                        point.y + movingEntity.dY
-                );
-                return movingEntity;
-            }
-            return null;
-        }, averageVelocity);
-        if (!toMatch.isEmpty()) {
-            averageVelocity.setLocation(averageVelocity.x / toMatch.size(), averageVelocity.y / toMatch.size());
-            this.dX += (averageVelocity.x - this.dX) * matchFactor;
-            this.dY += (averageVelocity.y - this.dY) * matchFactor;
-        }
+        computeCountResult(movingEntity -> movingEntity.position.distance(this.position) <= TOO_FAR_DISTANCE && movingEntity.position.distance(this.position) >= TOO_CLOSE_DISTANCE,
+                CountResult::fromMovingEntityDelta,
+                CountResult::add
+        )
+                .ifPresent(averageVelocity -> {
+                    Point2D averageVelocityPt = averageVelocity.getPoint2D().multiply(1D / averageVelocity.getNumber());
+                    this.dX += (averageVelocityPt.getX() - this.dX) * matchFactor;
+                    this.dY += (averageVelocityPt.getY() - this.dY) * matchFactor;
+                });
     }
 
     public void limitSpeed(long time) {
