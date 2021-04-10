@@ -1,4 +1,4 @@
-package util;
+package fr.kahlouch.fishmoves.util;
 
 public final class Variables {
     public static double VIEW_DISTANCE = 160;

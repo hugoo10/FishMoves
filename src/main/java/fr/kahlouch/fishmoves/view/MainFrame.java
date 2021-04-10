@@ -1,6 +1,6 @@
-package view;
+package fr.kahlouch.fishmoves.view;
 
-import controller.WorldController;
+import fr.kahlouch.fishmoves.controller.WorldController;
 import javafx.application.Platform;
 import javafx.scene.Camera;
 import javafx.scene.Group;

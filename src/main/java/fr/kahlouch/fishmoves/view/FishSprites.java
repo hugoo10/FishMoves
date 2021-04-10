@@ -1,4 +1,4 @@
-package view;
+package fr.kahlouch.fishmoves.view;
 
 import javafx.scene.image.Image;
 import lombok.AccessLevel;

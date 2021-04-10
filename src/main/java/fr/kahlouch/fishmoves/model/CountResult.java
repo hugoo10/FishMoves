@@ -1,4 +1,4 @@
-package model;
+package fr.kahlouch.fishmoves.model;
 
 import javafx.geometry.Point2D;
 import lombok.Getter;

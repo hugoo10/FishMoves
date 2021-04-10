@@ -1,7 +1,7 @@
-package model.state;
+package fr.kahlouch.fishmoves.model.state;
 
-import model.Fish;
-import view.FishSprites;
+import fr.kahlouch.fishmoves.model.Fish;
+import fr.kahlouch.fishmoves.view.FishSprites;
 
 public class MovingState {
     private final int currentTailPosition;

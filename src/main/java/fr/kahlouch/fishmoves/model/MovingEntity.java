@@ -1,8 +1,8 @@
-package model;
+package fr.kahlouch.fishmoves.model;
 
+import fr.kahlouch.fishmoves.util.Variables;
 import javafx.geometry.Point2D;
 import lombok.Getter;
-import util.Variables;
 
 import java.util.ArrayDeque;
 import java.util.Optional;

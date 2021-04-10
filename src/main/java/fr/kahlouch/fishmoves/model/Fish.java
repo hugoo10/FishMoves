@@ -1,6 +1,6 @@
-package model;
+package fr.kahlouch.fishmoves.model;
 
-import view.FishView;
+import fr.kahlouch.fishmoves.view.FishView;
 
 
 public class Fish extends MovingEntity {

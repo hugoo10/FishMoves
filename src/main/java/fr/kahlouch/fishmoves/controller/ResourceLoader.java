@@ -1,7 +1,7 @@
-package controller;
+package fr.kahlouch.fishmoves.controller;
 
+import fr.kahlouch.fishmoves.view.FishSprites;
 import javafx.scene.image.Image;
-import view.FishSprites;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;

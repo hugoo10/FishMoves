@@ -1,9 +1,9 @@
-package view;
+package fr.kahlouch.fishmoves.view;
 
-import controller.WorldController;
+import fr.kahlouch.fishmoves.controller.WorldController;
+import fr.kahlouch.fishmoves.model.Fish;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Group;
-import model.Fish;
 
 public class WorldPane {
     private final WorldController worldController;

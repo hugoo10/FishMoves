@@ -1,8 +1,8 @@
-package view;
+package fr.kahlouch.fishmoves.view;
 
+import fr.kahlouch.fishmoves.model.Fish;
+import fr.kahlouch.fishmoves.model.state.MovingStateContext;
 import javafx.scene.image.ImageView;
-import model.Fish;
-import model.state.MovingStateContext;
 
 import java.util.Random;
 

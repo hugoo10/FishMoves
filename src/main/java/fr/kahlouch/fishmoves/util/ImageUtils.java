@@ -1,4 +1,4 @@
-package util;
+package fr.kahlouch.fishmoves.util;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;

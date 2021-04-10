@@ -1,8 +1,8 @@
-package controller;
+package fr.kahlouch.fishmoves.controller;
 
+import fr.kahlouch.fishmoves.model.World;
+import fr.kahlouch.fishmoves.view.MainFrame;
 import javafx.stage.Stage;
-import model.World;
-import view.MainFrame;
 
 public class WorldController {
     private World world;

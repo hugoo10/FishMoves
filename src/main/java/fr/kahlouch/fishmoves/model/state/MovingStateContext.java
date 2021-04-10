@@ -1,7 +1,7 @@
-package model.state;
+package fr.kahlouch.fishmoves.model.state;
 
+import fr.kahlouch.fishmoves.model.Fish;
 import lombok.Setter;
-import model.Fish;
 
 @Setter
 public class MovingStateContext {

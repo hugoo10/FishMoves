@@ -1,5 +1,7 @@
-import controller.ResourceLoader;
-import controller.WorldController;
+package fr.kahlouch.fishmoves;
+
+import fr.kahlouch.fishmoves.controller.ResourceLoader;
+import fr.kahlouch.fishmoves.controller.WorldController;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
