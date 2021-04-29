@@ -1,4 +1,4 @@
-package fr.kahlouch.fishmoves.controller;
+package fr.kahlouch.fishmoves.resource;
 
 import javafx.scene.image.Image;
 

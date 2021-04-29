@@ -1,19 +1,20 @@
 package fr.kahlouch.fishmoves.model;
 
-import java.util.*;
+import javafx.geometry.Point2D;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class World {
     private final double width;
     private final double height;
-    private final List<MovingEntity> movingEntities;
+    private final List<GameEntity> entities;
 
-    public World(double width, double height, int nbBirds) {
+    public World(double width, double height) {
         this.width = width;
         this.height = height;
-        this.movingEntities = new ArrayList<>();
-        for (int i = 0; i < nbBirds; ++i) {
-            this.movingEntities.add(new Fish(i, randomWithMargin((int) this.width, 400), randomWithMargin((int) this.height, 200), this));
-        }
+        this.entities = new ArrayList<>();
     }
 
     private int randomBetween(int inf, int sup) {
@@ -24,27 +25,12 @@ public class World {
         return randomBetween(margin, size - margin);
     }
 
-    public List<MovingEntity> getMovingEntities() {
-        return movingEntities;
+    public void addEntity(GameEntity entity) {
+        entity.position = new Point2D(randomWithMargin((int) this.width, 400), randomWithMargin((int) this.height, 200));
+        this.entities.add(entity);
     }
 
-    public void tick() {
-        long time = System.currentTimeMillis();
-        movingEntities.parallelStream().forEach(movingEntity -> movingEntity.move(time));
-    }
-
-    public void runWorld() {
-        final TimerTask task = setupTimer(this::tick);
-        Timer timer = new Timer();
-        long period = 1000L / 60;
-        timer.scheduleAtFixedRate(task, 0, period);
-    }
-
-    private TimerTask setupTimer(Runnable runnable) {
-        return new TimerTask() {
-            public void run() {
-                runnable.run();
-            }
-        };
+    public List<GameEntity> getEntities() {
+        return entities;
     }
 }

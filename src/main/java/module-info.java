@@ -3,5 +3,6 @@ module birdmoves {
     requires javafx.controls;
     requires java.desktop;
 
+    requires gameresources;
     exports fr.kahlouch.fishmoves;
 }
