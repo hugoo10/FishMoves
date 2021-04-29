@@ -8,9 +8,10 @@ import fr.kahlouch.fishmoves.model.tail_state.TailMiddleFromRightState;
 import fr.kahlouch.fishmoves.model.tail_state.TailState;
 import javafx.geometry.Point2D;
 
+import java.util.Random;
+
 public class GameEntity {
     public int id;
-    public Point2D speed;
     public Point2D delta;
     public Point2D position;
     public TailState tailState;
@@ -25,7 +26,7 @@ public class GameEntity {
         this.aiComponent = aiComponent;
         this.physicsComponent = physicsComponent;
         this.tailState = new TailMiddleFromRightState();
-        this.delta = new Point2D(0,0);
+        this.delta = new Point2D(new Random().nextDouble() * 10 + 10, new Random().nextDouble() * 10 + 10);
 
     }
 

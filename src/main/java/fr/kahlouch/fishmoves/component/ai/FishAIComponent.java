@@ -20,7 +20,9 @@ public class FishAIComponent implements AIComponent {
 
     private Point2D changeDeltaDependingOnOtherFish(GameEntity gameEntity, List<GameEntity> otherEntities) {
         var moveAwayDelta = new Point2D(0, 0);
+        var moveAwayNb = 0;
         var getCloserDelta = new Point2D(0, 0);
+        var getCloserNb = 0;
         var stayInRangeDelta = new Point2D(0, 0);
         var stayInRangeNb = 0;
 
@@ -28,21 +30,29 @@ public class FishAIComponent implements AIComponent {
             if (areAtViewDistance(gameEntity, other)) {
                 if (needToGetCloser(gameEntity, other)) {
                     getCloserDelta = getCloserDelta.add(other.position);
+                    ++getCloserNb;
                 } else if (needToMoveAway(gameEntity, other)) {
                     moveAwayDelta = moveAwayDelta.add(gameEntity.position.subtract(other.position));
-                } else {
+                    ++moveAwayNb;
+                } else if (needToStayInRange(gameEntity, other)) {
                     stayInRangeDelta = stayInRangeDelta.add(other.delta);
                     ++stayInRangeNb;
                 }
             }
         }
 
-        var newDelta = moveAwayDelta.multiply(AVOID_FACTOR)
-                .add(getCloserDelta.subtract(gameEntity.position).multiply(FLY_TOWARD_FACTOR));
+        var newDelta = gameEntity.delta;
+        if (moveAwayNb > 0) {
+            newDelta = moveAwayDelta.multiply(AVOID_FACTOR);
+        }
+
+        if (getCloserNb > 0) {
+            newDelta = newDelta.add(getCloserDelta.subtract(gameEntity.position).multiply(FLY_TOWARD_FACTOR));
+        }
 
         if (stayInRangeNb > 0) {
-            stayInRangeDelta = stayInRangeDelta.multiply(1D / stayInRangeNb);
-            newDelta = stayInRangeDelta.subtract(newDelta).multiply(MATCH_FACTOR);
+            var averageDelta = stayInRangeDelta.multiply(1D / stayInRangeNb);
+            newDelta = newDelta.add(averageDelta.subtract(newDelta).multiply(MATCH_FACTOR));
         }
         return newDelta;
 
@@ -54,6 +64,11 @@ public class FishAIComponent implements AIComponent {
 
     private boolean needToMoveAway(GameEntity entity, GameEntity other) {
         return other.position.distance(entity.position) < Variables.TOO_CLOSE_DISTANCE;
+    }
+
+    private boolean needToStayInRange(GameEntity entity, GameEntity other) {
+        return other.position.distance(entity.position) <= Variables.TOO_FAR_DISTANCE
+                && other.position.distance(entity.position) >= Variables.TOO_CLOSE_DISTANCE;
     }
 
     private boolean areAtViewDistance(GameEntity entity, GameEntity other) {

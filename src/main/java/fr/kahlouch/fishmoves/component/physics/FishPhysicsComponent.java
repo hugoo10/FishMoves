@@ -31,12 +31,12 @@ public class FishPhysicsComponent implements PhysicsComponent {
         return Math.sqrt(speed.getX() * speed.getX() + speed.getY() * speed.getY()) / delayInSeconds;
     }
 
-    private Point2D bounce(GameEntity gameEntity, Point2D speed) {
-        if (gameEntity.position.getX() + speed.getX() < 20 || gameEntity.position.getX() + speed.getX() >= 1900) {
-            return new Point2D(-speed.getX(), speed.getY());
-        } else if (gameEntity.position.getY() + speed.getY() < 20 || gameEntity.position.getY() + speed.getY() >= 1060) {
-            return new Point2D(speed.getX(), -speed.getY());
+    private Point2D bounce(GameEntity gameEntity, Point2D delta) {
+        if (gameEntity.position.getX() + delta.getX() < 20 || gameEntity.position.getX() + delta.getX() >= 1900) {
+            return new Point2D(-delta.getX(), delta.getY());
+        } else if (gameEntity.position.getY() + delta.getY() < 20 || gameEntity.position.getY() + delta.getY() >= 1060) {
+            return new Point2D(delta.getX(), -delta.getY());
         }
-        return speed;
+        return delta;
     }
 }
