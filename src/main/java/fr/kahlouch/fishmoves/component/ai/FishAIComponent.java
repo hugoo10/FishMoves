@@ -34,7 +34,7 @@ public class FishAIComponent implements AIComponent {
                 } else if (needToMoveAway(gameEntity, other)) {
                     moveAwayDelta = moveAwayDelta.add(gameEntity.position.subtract(other.position));
                     ++moveAwayNb;
-                } else if (needToStayInRange(gameEntity, other)) {
+                } else {
                     stayInRangeDelta = stayInRangeDelta.add(other.delta);
                     ++stayInRangeNb;
                 }
@@ -64,11 +64,6 @@ public class FishAIComponent implements AIComponent {
 
     private boolean needToMoveAway(GameEntity entity, GameEntity other) {
         return other.position.distance(entity.position) < Variables.TOO_CLOSE_DISTANCE;
-    }
-
-    private boolean needToStayInRange(GameEntity entity, GameEntity other) {
-        return other.position.distance(entity.position) <= Variables.TOO_FAR_DISTANCE
-                && other.position.distance(entity.position) >= Variables.TOO_CLOSE_DISTANCE;
     }
 
     private boolean areAtViewDistance(GameEntity entity, GameEntity other) {
