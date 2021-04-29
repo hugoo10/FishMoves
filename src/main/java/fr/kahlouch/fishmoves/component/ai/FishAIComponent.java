@@ -2,7 +2,7 @@ package fr.kahlouch.fishmoves.component.ai;
 
 import fr.kahlouch.fishmoves.model.GameEntity;
 import fr.kahlouch.fishmoves.model.World;
-import fr.kahlouch.fishmoves.util.Variables;
+import fr.kahlouch.fishmoves.util.Constants;
 import javafx.geometry.Point2D;
 
 import java.util.List;
@@ -59,14 +59,14 @@ public class FishAIComponent implements AIComponent {
     }
 
     private boolean needToGetCloser(GameEntity entity, GameEntity other) {
-        return other.position.distance(entity.position) > Variables.TOO_FAR_DISTANCE;
+        return other.position.distance(entity.position) > Constants.TOO_FAR_DISTANCE;
     }
 
     private boolean needToMoveAway(GameEntity entity, GameEntity other) {
-        return other.position.distance(entity.position) < Variables.TOO_CLOSE_DISTANCE;
+        return other.position.distance(entity.position) < Constants.TOO_CLOSE_DISTANCE;
     }
 
     private boolean areAtViewDistance(GameEntity entity, GameEntity other) {
-        return entity.id != other.id && entity.position.distance(other.position) < Variables.VIEW_DISTANCE;
+        return entity.id != other.id && entity.position.distance(other.position) < Constants.VIEW_DISTANCE;
     }
 }

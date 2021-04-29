@@ -2,7 +2,7 @@ package fr.kahlouch.fishmoves.component.physics;
 
 import fr.kahlouch.fishmoves.model.GameEntity;
 import fr.kahlouch.fishmoves.model.World;
-import fr.kahlouch.fishmoves.util.Variables;
+import fr.kahlouch.fishmoves.util.Constants;
 import javafx.geometry.Point2D;
 
 public class FishPhysicsComponent implements PhysicsComponent {
@@ -20,8 +20,8 @@ public class FishPhysicsComponent implements PhysicsComponent {
 
     private Point2D limitSpeed(Point2D speed, long elapsedNano) {
         final double absoluteSpeed = getSpeed(speed, elapsedNano);
-        if (absoluteSpeed > Variables.MAX_SPEED) {
-            return speed.multiply(1D / absoluteSpeed).multiply(Variables.MAX_SPEED);
+        if (absoluteSpeed > Constants.MAX_SPEED) {
+            return speed.multiply(1D / absoluteSpeed).multiply(Constants.MAX_SPEED);
         }
         return speed;
     }
