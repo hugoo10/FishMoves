@@ -9,8 +9,9 @@ import fr.kahlouch.fishmoves.component.physics.PhysicsComponent;
 import fr.kahlouch.fishmoves.model.GameEntity;
 import fr.kahlouch.fishmoves.model.World;
 import fr.kahlouch.fishmoves.view.FishColor;
-import fr.kahlouch.fishmoves.view.Graphics;
+import fr.kahlouch.gameresources.graphics._2d.Graphics2D;
 import fr.kahlouch.gameresources.pattern.game_loop.FluidGameLoop;
+import javafx.scene.PerspectiveCamera;
 import javafx.stage.Stage;
 
 import java.util.Random;
@@ -20,11 +21,14 @@ public class Game extends FluidGameLoop {
     private PhysicsComponent[] physicsComponents;
     private GraphicsComponent[] graphicsComponents;
     private World world;
-    private Graphics graphics;
+    private Graphics2D graphics;
 
     public Game(Stage stage, int nbEntities) {
         this.world = new World(1920, 1080);
-        this.graphics = new Graphics(stage);
+        this.graphics = Graphics2D.builder(stage)
+        .addCamera(new PerspectiveCamera(false), 0,0,-500)
+        .setFullScreen(true)
+        .build();
 
         this.aiComponents = new AIComponent[nbEntities];
         this.physicsComponents = new PhysicsComponent[nbEntities];
@@ -36,6 +40,7 @@ public class Game extends FluidGameLoop {
             this.graphicsComponents[i] = new FishGraphicsComponent(FishColor.values()[new Random().nextInt(FishColor.values().length)]);
             this.world.addEntity(new GameEntity(i, this.world, this.graphicsComponents[i], this.aiComponents[i], this.physicsComponents[i]));
         }
+        this.graphics.show();
     }
 
     @Override
