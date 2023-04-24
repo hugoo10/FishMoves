@@ -1,27 +1,40 @@
 package fr.kahlouch.fishmoves.component.physics;
 
 import fr.kahlouch.fishmoves.model.GameEntity;
+import fr.kahlouch.fishmoves.model.Shark;
 import fr.kahlouch.fishmoves.model.World;
 import fr.kahlouch.fishmoves.util.Constants;
 import javafx.geometry.Point2D;
+
+import java.util.Optional;
 
 public class FishPhysicsComponent implements PhysicsComponent {
 
     @Override
     public void update(GameEntity gameEntity, World world, long elapsedNano) {
-        var newDelta = limitSpeed(gameEntity.delta, elapsedNano);
+
+        var newDelta = flee(gameEntity, elapsedNano).orElseGet(() -> limitSpeed(gameEntity.delta, elapsedNano));
         newDelta = bounce(gameEntity, newDelta);
-        gameEntity.position = gameEntity.position.add(newDelta);
-        gameEntity.delta = newDelta;
 
-        gameEntity.tailState = gameEntity.tailState.update(getSpeed(gameEntity.delta, elapsedNano));
-
+        gameEntity.move(newDelta);
+        gameEntity.moveTail(getSpeed(gameEntity.delta, elapsedNano), elapsedNano);
     }
 
+    private Optional<Point2D> flee(GameEntity gameEntity,long elapsedNano) {
+        if(gameEntity.position.distance(Shark.INSTANCE.getPosition()) < 200){
+            return Optional.of(maxSpeed(gameEntity.position.subtract(Shark.INSTANCE.getPosition()), elapsedNano));
+        }
+        return Optional.empty();
+    }
+
+    private Point2D maxSpeed(Point2D direction, long elapsedNano) {
+        final double absoluteSpeed = getSpeed(direction, elapsedNano);
+        return direction.multiply(1D / absoluteSpeed).multiply(Constants.MAX_SPEED);
+    }
     private Point2D limitSpeed(Point2D speed, long elapsedNano) {
         final double absoluteSpeed = getSpeed(speed, elapsedNano);
         if (absoluteSpeed > Constants.MAX_SPEED) {
-            return speed.multiply(1D / absoluteSpeed).multiply(Constants.MAX_SPEED);
+            return maxSpeed(speed, elapsedNano);
         }
         return speed;
     }

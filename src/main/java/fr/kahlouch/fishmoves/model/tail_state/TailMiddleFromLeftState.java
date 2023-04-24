@@ -3,10 +3,12 @@ package fr.kahlouch.fishmoves.model.tail_state;
 import fr.kahlouch.fishmoves.model.TailSide;
 
 public class TailMiddleFromLeftState extends TailState {
+    public static final TailMiddleFromLeftState INSTANCE = new TailMiddleFromLeftState();
+    private TailMiddleFromLeftState(){}
 
     @Override
-    protected TailState nextState() {
-        return new TailRightState();
+    public TailState nextState() {
+        return TailRightState.INSTANCE;
     }
 
 
